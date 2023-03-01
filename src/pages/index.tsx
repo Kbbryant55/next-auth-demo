@@ -16,12 +16,18 @@ export default function Home() {
               className="w-32 h-32 rounded-full"
             />
             <h4>{session?.user?.email}</h4>
-            <button className="bg-cyan-300" onClick={() => signOut()}>
+            <button
+              className="bg-cyan-300 w-20 h-20 rounded-xl"
+              onClick={() => signOut()}
+            >
               Sign Out
             </button>
           </div>
         ) : (
-          <button className="bg-cyan-300" onClick={() => signIn()}>
+          <button
+            className="bg-cyan-300 w-20 h-20 rounded-xl"
+            onClick={() => signIn()}
+          >
             Sign In
           </button>
         )}
