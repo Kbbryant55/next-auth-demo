@@ -4,7 +4,6 @@ import { useSession, signIn, signOut, getSession } from "next-auth/react";
 export default function Home() {
   const { data: session } = useSession();
 
-  console.log(session);
   return (
     <>
       <div className="h-screen w-screen flex items-center justify-center">
