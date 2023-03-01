@@ -6,8 +6,11 @@ import EmailProvider from "next-auth/providers/email";
 import GitHubProvider from "next-auth/providers/github";
 import DiscordProvider from "next-auth/providers/discord";
 import TwitterProvider from "next-auth/providers/twitter";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import clientPromise from "../../../lib/mongodb";
 
 export default NextAuth({
+  adapter: MongoDBAdapter(clientPromise),
   providers: [
     // OAuth authentication providers...
     GoogleProvider({
