@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import AppleProvider from "next-auth/providers/apple";
+import Auth0Provider from "next-auth/providers/auth0";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
@@ -29,6 +29,11 @@ export default NextAuth({
     TwitterProvider({
       clientId: process.env.TWITTER_CLIENT_ID as string,
       clientSecret: process.env.TWITTER_CLIENT_SECRET as string,
+    }),
+    Auth0Provider({
+      clientId: process.env.AUTH0_CLIENT_ID as string,
+      clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
+      issuer: process.env.AUTH0_ISSUER as string,
     }),
     // Passwordless / email sign in
     // EmailProvider({
