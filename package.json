@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.9.11",
     "@next-auth/mongodb-adapter": "^1.1.1",
     "@types/node": "18.14.2",
     "@types/react": "18.0.28",
@@ -21,9 +22,16 @@
     "next-auth": "^4.19.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "typescript": "4.9.5"
+    "react-hook-form": "^7.43.3",
+    "react-icons": "^4.7.1",
+    "typescript": "4.9.5",
+    "validator": "^13.9.0",
+    "zod": "^3.20.6",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
+    "@types/validator": "^13.7.13",
+    "@types/zxcvbn": "^4.4.1",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.7"
