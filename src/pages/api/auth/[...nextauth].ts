@@ -2,7 +2,7 @@ import NextAuth, { Account, Profile, User } from "next-auth";
 import Auth0Provider from "next-auth/providers/auth0";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
-import EmailProvider from "next-auth/providers/email";
+import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import DiscordProvider from "next-auth/providers/discord";
 import TwitterProvider from "next-auth/providers/twitter";
@@ -10,11 +10,43 @@ import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import clientPromise from "../../../lib/mongodb";
 import { Adapter } from "next-auth/adapters";
 import { JWT } from "next-auth/jwt";
+import connectDb from "@/utils/connectDb";
+import UserModel from "@/models/User";
+import bcrypt from "bcryptjs";
 
 export default NextAuth({
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     // OAuth authentication providers...
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: {
+          label: "Name",
+          type: "text",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+        },
+      },
+      async authorize(credentials) {
+        await connectDb();
+        const user = await UserModel.findOne({ email: credentials!.email });
+        if (!user) {
+          throw new Error("Email is not registered.");
+        }
+        const isPasswordCorrect = await bcrypt.compare(
+          credentials!.password,
+          user.password
+        );
+
+        if (!isPasswordCorrect) {
+          throw new Error("Password is incorrect.");
+        }
+        return user;
+      },
+    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_ID as string,
       clientSecret: process.env.GOOGLE_SECRET as string,
@@ -40,15 +72,13 @@ export default NextAuth({
       clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
       issuer: process.env.AUTH0_ISSUER as string,
     }),
-    // Passwordless / email sign in
-    // EmailProvider({
-    //   server: process.env.MAIL_SERVER,
-    //   from: "NextAuth.js <no-reply@example.com>",
-    // }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
+  },
+  pages: {
+    signIn: "/auth",
   },
   callbacks: {
     async jwt({
